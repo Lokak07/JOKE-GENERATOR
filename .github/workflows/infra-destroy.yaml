@@ -1,0 +1,37 @@
+name: "Terraform Destroy Pipeline"
+
+on: 
+  workflow_dispatch:
+
+env: 
+  TF_LOG: INFO
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+  terraform-destroy:
+    name: "Terraform Destroy Job"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./eks-install
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Download terraform.tfvars from S3
+        run: aws s3 cp s3://shakthi-tf-bucket/terraform.tfvars terraform.tfvars
+
+      - name: Terraform init
+        run: terraform init
+
+      - name: Terraform destroy
+        run: terraform destroy -auto-approve -input=false
+
