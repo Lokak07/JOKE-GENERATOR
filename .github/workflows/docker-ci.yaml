@@ -7,15 +7,15 @@ on:
 
   push:
     branches:
-      - main
+      - frontend-config
     paths:
-      - 'src/flagd-ui/**'
+      - 'SRC/backend/**'
 
   pull_request:
     branches:
-      - main
+      - frontend-config
     paths:
-      - 'src/flagd-ui/**'  
+      - 'SRC/backend/**' 
 
 jobs:
   build:
@@ -31,11 +31,11 @@ jobs:
           node-version: 20
 
       - name: 📦 Install dependencies
-        working-directory: src/flagd-ui
+        working-directory: SRC/backend
         run: npm ci
 
       - name: 🏗️ Build Next.js app
-        working-directory: src/flagd-ui
+        working-directory: SRC/backend
         run: npm run build
 
   code-quality:
@@ -51,15 +51,15 @@ jobs:
           node-version: 20
 
       - name: 📦 Install dependencies
-        working-directory: src/flagd-ui
+        working-directory: SRC/backend
         run: npm ci
 
       - name: 🧹 Run ESLint
-        working-directory: src/flagd-ui
+        working-directory: SRC/backend
         run: npm run lint
 
       - name: ✅ Run TypeScript type check
-        working-directory: src/flagd-ui
+        working-directory: SRC/backend
         run: npx tsc --noEmit
 
       - name: 🔍 Trivy Dependency Vulnerability Scan
@@ -106,19 +106,19 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: src/flagd-ui
-          file: src/flagd-ui/Dockerfile
+          file: SRC/backend/Dockerfile
           push: false
           load: true # <-- load image locally for scanning
-          tags: ${{ secrets.DOCKER_USERNAME }}/flagd-ui:${{ github.run_id }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/flagd-ui:${{ github.ref_name }}
 
 
       - name: 🚀 Push Docker image (only if scan passed)
         uses: docker/build-push-action@v5
         with:
           context: src/flagd-ui
-          file: src/flagd-ui/Dockerfile
+          file: SRC/backend/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/flagd-ui:${{ github.run_id }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/flagd-ui:${{ github.ref_name }}
 
 
   # updatek8s:

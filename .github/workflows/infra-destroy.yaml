@@ -15,7 +15,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./eks-install
+        working-directory: ./INFRA/eks-install
 
     steps:
       - name: Checkout the repository
