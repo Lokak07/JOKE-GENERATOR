@@ -33,6 +33,7 @@ spec:
       name: mysql-pv
     spec:
       accessModes: [ "ReadWriteOnce" ]
+      storageClassName: ebs-sc
       resources:
         requests:
           storage: 1Gi

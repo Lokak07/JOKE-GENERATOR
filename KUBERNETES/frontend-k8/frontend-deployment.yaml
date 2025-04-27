@@ -19,7 +19,7 @@ spec:
         app: front-end
     spec:
       containers:
-      - image: loka07/jokes-frontend:v3
+      - image: loka07/frontend-jokes:w1
         name: jokes-frontend
         resources: {}
         ports:
