@@ -1,6 +1,13 @@
 name: "Terraform Destroy Pipeline"
 
 on: 
+
+  push: 
+    branches:
+      - frontend-config
+    paths:
+      - INFRA/eks-install**
+      - .github/workflows/**
   workflow_dispatch:
 
 env: 
