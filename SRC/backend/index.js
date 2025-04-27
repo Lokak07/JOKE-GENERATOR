@@ -8,11 +8,12 @@ app.use(cors());
 
 // (You can remove this if you're only using external API)
 const db = mysql.createConnection({
-  host: 'mysql',
-  user: 'root',
-  password: 'rootpass',
-  database: 'jokesdb'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_DATABASE
 });
+
 
 // API route to get joke from JokeAPI
 app.get('/joke', async (req, res) => {
