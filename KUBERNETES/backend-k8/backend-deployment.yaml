@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-end
-  namespace: backend    # <--- make sure to add the namespace here
+  namespace: jokes-app    # <--- make sure to add the namespace here
   labels:
     app: backend-end
 spec:
@@ -17,12 +17,12 @@ spec:
     spec:
       containers:
       - name: jokes-bakend
-        image: loka07/jokes-bakend:v2
+        image: loka07/jokes-backend:v2 
         ports:
-        - containerPort: 3000
+        - containerPort: 80
         env:
         - name: DB_HOST
-          value: mysql.database.svc.cluster.local
+          value: mysql
         - name: DB_DATABASE
           valueFrom:
             configMapKeyRef:

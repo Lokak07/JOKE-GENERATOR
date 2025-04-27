@@ -28,5 +28,5 @@ app.get('/joke', async (req, res) => {
 
 // Server listening
 app.listen(3000, () => {
-  console.log('Backend running on http://localhost:3000');
+  console.log('Backend running on http://0.0.0.0:3000');
 });

@@ -1,0 +1,1008 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/restartedAt: "2025-04-27T10:40:24Z"
+    creationTimestamp: "2025-04-27T10:42:04Z"
+    generateName: backend-end-57f9c88f44-
+    labels:
+      app: backend-end
+      pod-template-hash: 57f9c88f44
+    name: backend-end-57f9c88f44-qbjhs
+    namespace: jokes-app
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: backend-end-57f9c88f44
+      uid: 7a8adb45-02ac-4ece-b79f-5ec008eec802
+    resourceVersion: "15619"
+    uid: b7f69fee-b873-4309-b7fc-d4981593c8e9
+  spec:
+    containers:
+    - env:
+      - name: DB_HOST
+        value: mysql
+      - name: DB_DATABASE
+        valueFrom:
+          configMapKeyRef:
+            key: database
+            name: mysql-config
+      - name: DB_USER
+        valueFrom:
+          secretKeyRef:
+            key: username
+            name: mysql-secret
+      - name: DB_PASS
+        valueFrom:
+          secretKeyRef:
+            key: password
+            name: mysql-secret
+      image: loka07/jokes-backend:v2
+      imagePullPolicy: IfNotPresent
+      name: jokes-bakend
+      ports:
+      - containerPort: 80
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-lxz6t
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: kind-control-plane
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-lxz6t
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-04-27T10:42:05Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2025-04-27T10:42:05Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-04-27T10:42:05Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-04-27T10:42:05Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-04-27T10:42:05Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://f411075d97c56f44b487e62e7c2261e74a12e49631cef009319d1edff9f3d0aa
+      image: docker.io/loka07/jokes-backend:v2
+      imageID: docker.io/loka07/jokes-backend@sha256:0aa1290a24a7f1ecdbe4f7e75e4b6508e72e472e9b7913eec1e949c7228ebf8d
+      lastState: {}
+      name: jokes-bakend
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2025-04-27T10:42:05Z"
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-lxz6t
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 172.18.0.2
+    hostIPs:
+    - ip: 172.18.0.2
+    phase: Running
+    podIP: 10.244.0.42
+    podIPs:
+    - ip: 10.244.0.42
+    qosClass: BestEffort
+    startTime: "2025-04-27T10:42:05Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2025-04-27T10:30:43Z"
+    generateName: front-end-6bf9bf6c59-
+    labels:
+      app: front-end
+      pod-template-hash: 6bf9bf6c59
+    name: front-end-6bf9bf6c59-z4j8h
+    namespace: jokes-app
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: front-end-6bf9bf6c59
+      uid: 5cf4786d-b5cd-42a9-bdf7-cc4b387284a9
+    resourceVersion: "13856"
+    uid: 369b39e0-125d-479f-b478-4cd7b69fe3e6
+  spec:
+    containers:
+    - image: loka07/jokes-frontend:v3
+      imagePullPolicy: IfNotPresent
+      name: jokes-frontend
+      ports:
+      - containerPort: 80
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-5ltth
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: kind-control-plane
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-5ltth
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-04-27T10:30:44Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2025-04-27T10:30:43Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-04-27T10:30:44Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-04-27T10:30:44Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-04-27T10:30:43Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://5ddcc807f31e3293e6055bf3db50b58e7b8761bacbad3a03f0a490e68011b989
+      image: docker.io/loka07/jokes-frontend:v3
+      imageID: docker.io/loka07/jokes-frontend@sha256:9bb42e0e758e2af6e3740fcffe5da21f8cb55bcc6189ff05f581ddb22d0cba29
+      lastState: {}
+      name: jokes-frontend
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2025-04-27T10:30:44Z"
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-5ltth
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 172.18.0.2
+    hostIPs:
+    - ip: 172.18.0.2
+    phase: Running
+    podIP: 10.244.0.32
+    podIPs:
+    - ip: 10.244.0.32
+    qosClass: BestEffort
+    startTime: "2025-04-27T10:30:43Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2025-04-27T10:30:52Z"
+    generateName: mysql-
+    labels:
+      app: mysql
+      apps.kubernetes.io/pod-index: "0"
+      controller-revision-hash: mysql-fcbb967b8
+      statefulset.kubernetes.io/pod-name: mysql-0
+    name: mysql-0
+    namespace: jokes-app
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: StatefulSet
+      name: mysql
+      uid: 16c47793-d22d-47f7-8583-1abb8aabee21
+    resourceVersion: "13939"
+    uid: b0052f7d-4515-4dd5-a950-86e3f0600971
+  spec:
+    containers:
+    - env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: password
+            name: mysql-secret
+      image: loka07/jokes-db:latest
+      imagePullPolicy: Always
+      name: mysql
+      ports:
+      - containerPort: 3306
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/lib/mysql
+        name: mysql-pv
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-bgd55
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostname: mysql-0
+    nodeName: kind-control-plane
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    subdomain: mysql
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: mysql-pv
+      persistentVolumeClaim:
+        claimName: mysql-pv-mysql-0
+    - name: kube-api-access-bgd55
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-04-27T10:30:57Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2025-04-27T10:30:53Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-04-27T10:30:57Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-04-27T10:30:57Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-04-27T10:30:53Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://a3b327899acf94c05b5a11dab1b44494d1ae9c8cf7269e6a05c0a5fd8df8bd0f
+      image: docker.io/loka07/jokes-db:latest
+      imageID: docker.io/loka07/jokes-db@sha256:b30daeb6ec986e40e3b5e386f89cc54402929660d946c0716de280af376faf15
+      lastState: {}
+      name: mysql
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2025-04-27T10:30:56Z"
+      volumeMounts:
+      - mountPath: /var/lib/mysql
+        name: mysql-pv
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-bgd55
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 172.18.0.2
+    hostIPs:
+    - ip: 172.18.0.2
+    phase: Running
+    podIP: 10.244.0.35
+    podIPs:
+    - ip: 10.244.0.35
+    qosClass: BestEffort
+    startTime: "2025-04-27T10:30:53Z"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"backend-end-service","namespace":"jokes-app"},"spec":{"ports":[{"port":80,"protocol":"TCP","targetPort":3000}],"selector":{"app":"backend-end"},"type":"ClusterIP"}}
+    creationTimestamp: "2025-04-27T10:30:31Z"
+    name: backend-end-service
+    namespace: jokes-app
+    resourceVersion: "16629"
+    uid: f738ca99-328d-4001-a304-e532f782745a
+  spec:
+    clusterIP: 10.96.205.73
+    clusterIPs:
+    - 10.96.205.73
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 3000
+    selector:
+      app: backend-end
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"front-end-service","namespace":"jokes-app"},"spec":{"ports":[{"port":80,"protocol":"TCP","targetPort":80}],"selector":{"app":"front-end"},"type":"ClusterIP"}}
+    creationTimestamp: "2025-04-27T10:30:43Z"
+    name: front-end-service
+    namespace: jokes-app
+    resourceVersion: "13836"
+    uid: a46290cb-32bf-4b4b-8cf7-a256a07d7775
+  spec:
+    clusterIP: 10.96.117.89
+    clusterIPs:
+    - 10.96.117.89
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: front-end
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"mysql","namespace":"jokes-app"},"spec":{"clusterIP":"None","ports":[{"port":3306}],"selector":{"app":"mysql"}}}
+    creationTimestamp: "2025-04-27T10:30:52Z"
+    name: mysql
+    namespace: jokes-app
+    resourceVersion: "13886"
+    uid: 9c780fc3-f280-4f43-ba5a-732122892aba
+  spec:
+    clusterIP: None
+    clusterIPs:
+    - None
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 3306
+      protocol: TCP
+      targetPort: 3306
+    selector:
+      app: mysql
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "3"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"backend-end"},"name":"backend-end","namespace":"jokes-app"},"spec":{"replicas":2,"selector":{"matchLabels":{"app":"backend-end"}},"template":{"metadata":{"labels":{"app":"backend-end"}},"spec":{"containers":[{"env":[{"name":"DB_HOST","value":"mysql"},{"name":"DB_DATABASE","valueFrom":{"configMapKeyRef":{"key":"database","name":"mysql-config"}}},{"name":"DB_USER","valueFrom":{"secretKeyRef":{"key":"username","name":"mysql-secret"}}},{"name":"DB_PASS","valueFrom":{"secretKeyRef":{"key":"password","name":"mysql-secret"}}}],"image":"loka07/jokes-backend:v2","name":"jokes-bakend","ports":[{"containerPort":80}]}]}}}}
+    creationTimestamp: "2025-04-27T10:35:20Z"
+    generation: 4
+    labels:
+      app: backend-end
+    name: backend-end
+    namespace: jokes-app
+    resourceVersion: "16247"
+    uid: fafe63ac-62d5-45dd-b682-648c822886e8
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: backend-end
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-04-27T10:40:24Z"
+        creationTimestamp: null
+        labels:
+          app: backend-end
+      spec:
+        containers:
+        - env:
+          - name: DB_HOST
+            value: mysql
+          - name: DB_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                key: database
+                name: mysql-config
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: username
+                name: mysql-secret
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: mysql-secret
+          image: loka07/jokes-backend:v2
+          imagePullPolicy: IfNotPresent
+          name: jokes-bakend
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2025-04-27T10:42:04Z"
+      lastUpdateTime: "2025-04-27T10:42:04Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-04-27T10:35:20Z"
+      lastUpdateTime: "2025-04-27T10:42:05Z"
+      message: ReplicaSet "backend-end-57f9c88f44" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 4
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"creationTimestamp":null,"labels":{"app":"front-end"},"name":"front-end","namespace":"jokes-app"},"spec":{"replicas":2,"selector":{"matchLabels":{"app":"front-end"}},"strategy":{},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"front-end"}},"spec":{"containers":[{"image":"loka07/jokes-frontend:v3","name":"jokes-frontend","ports":[{"containerPort":80}],"resources":{}}]}}},"status":{}}
+    creationTimestamp: "2025-04-27T10:30:43Z"
+    generation: 2
+    labels:
+      app: front-end
+    name: front-end
+    namespace: jokes-app
+    resourceVersion: "16225"
+    uid: 0cd742af-39e5-48a8-9f70-c26b10ae33a2
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: front-end
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: front-end
+      spec:
+        containers:
+        - image: loka07/jokes-frontend:v3
+          imagePullPolicy: IfNotPresent
+          name: jokes-frontend
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2025-04-27T10:30:44Z"
+      lastUpdateTime: "2025-04-27T10:30:44Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-04-27T10:30:43Z"
+      lastUpdateTime: "2025-04-27T10:30:44Z"
+      message: ReplicaSet "front-end-6bf9bf6c59" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 2
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "3"
+    creationTimestamp: "2025-04-27T10:42:04Z"
+    generation: 3
+    labels:
+      app: backend-end
+      pod-template-hash: 57f9c88f44
+    name: backend-end-57f9c88f44
+    namespace: jokes-app
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: backend-end
+      uid: fafe63ac-62d5-45dd-b682-648c822886e8
+    resourceVersion: "16246"
+    uid: 7a8adb45-02ac-4ece-b79f-5ec008eec802
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: backend-end
+        pod-template-hash: 57f9c88f44
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-04-27T10:40:24Z"
+        creationTimestamp: null
+        labels:
+          app: backend-end
+          pod-template-hash: 57f9c88f44
+      spec:
+        containers:
+        - env:
+          - name: DB_HOST
+            value: mysql
+          - name: DB_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                key: database
+                name: mysql-config
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: username
+                name: mysql-secret
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: mysql-secret
+          image: loka07/jokes-backend:v2
+          imagePullPolicy: IfNotPresent
+          name: jokes-bakend
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 3
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2025-04-27T10:35:20Z"
+    generation: 3
+    labels:
+      app: backend-end
+      pod-template-hash: 65565996b4
+    name: backend-end-65565996b4
+    namespace: jokes-app
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: backend-end
+      uid: fafe63ac-62d5-45dd-b682-648c822886e8
+    resourceVersion: "15276"
+    uid: 078e8fa8-e614-41c5-b0be-f89a79878eb7
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: backend-end
+        pod-template-hash: 65565996b4
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: backend-end
+          pod-template-hash: 65565996b4
+      spec:
+        containers:
+        - env:
+          - name: DB_HOST
+            value: mysql-service
+          - name: DB_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                key: database
+                name: mysql-config
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: username
+                name: mysql-secret
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: mysql-secret
+          image: loka07/jokes-backend:v2
+          imagePullPolicy: IfNotPresent
+          name: jokes-bakend
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "2"
+    creationTimestamp: "2025-04-27T10:40:24Z"
+    generation: 4
+    labels:
+      app: backend-end
+      pod-template-hash: 74949bb658
+    name: backend-end-74949bb658
+    namespace: jokes-app
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: backend-end
+      uid: fafe63ac-62d5-45dd-b682-648c822886e8
+    resourceVersion: "15634"
+    uid: 20f4f3de-6be4-41db-a55f-77f6bd763790
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: backend-end
+        pod-template-hash: 74949bb658
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-04-27T10:40:24Z"
+        creationTimestamp: null
+        labels:
+          app: backend-end
+          pod-template-hash: 74949bb658
+      spec:
+        containers:
+        - env:
+          - name: DB_HOST
+            value: mysql-service
+          - name: DB_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                key: database
+                name: mysql-config
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: username
+                name: mysql-secret
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: mysql-secret
+          image: loka07/jokes-backend:v2
+          imagePullPolicy: IfNotPresent
+          name: jokes-bakend
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 4
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2025-04-27T10:30:43Z"
+    generation: 2
+    labels:
+      app: front-end
+      pod-template-hash: 6bf9bf6c59
+    name: front-end-6bf9bf6c59
+    namespace: jokes-app
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: front-end
+      uid: 0cd742af-39e5-48a8-9f70-c26b10ae33a2
+    resourceVersion: "16224"
+    uid: 5cf4786d-b5cd-42a9-bdf7-cc4b387284a9
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: front-end
+        pod-template-hash: 6bf9bf6c59
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: front-end
+          pod-template-hash: 6bf9bf6c59
+      spec:
+        containers:
+        - image: loka07/jokes-frontend:v3
+          imagePullPolicy: IfNotPresent
+          name: jokes-frontend
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 2
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"StatefulSet","metadata":{"annotations":{},"name":"mysql","namespace":"jokes-app"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"mysql"}},"serviceName":"mysql","template":{"metadata":{"labels":{"app":"mysql"}},"spec":{"containers":[{"env":[{"name":"MYSQL_ROOT_PASSWORD","valueFrom":{"secretKeyRef":{"key":"password","name":"mysql-secret"}}}],"image":"loka07/jokes-db:latest","name":"mysql","ports":[{"containerPort":3306}],"volumeMounts":[{"mountPath":"/var/lib/mysql","name":"mysql-pv"}]}]}},"volumeClaimTemplates":[{"metadata":{"name":"mysql-pv"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"1Gi"}}}}]}}
+    creationTimestamp: "2025-04-27T10:30:52Z"
+    generation: 1
+    name: mysql
+    namespace: jokes-app
+    resourceVersion: "13940"
+    uid: 16c47793-d22d-47f7-8583-1abb8aabee21
+  spec:
+    persistentVolumeClaimRetentionPolicy:
+      whenDeleted: Retain
+      whenScaled: Retain
+    podManagementPolicy: OrderedReady
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: mysql
+    serviceName: mysql
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: mysql
+      spec:
+        containers:
+        - env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: mysql-secret
+          image: loka07/jokes-db:latest
+          imagePullPolicy: Always
+          name: mysql
+          ports:
+          - containerPort: 3306
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: mysql-pv
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    updateStrategy:
+      rollingUpdate:
+        partition: 0
+      type: RollingUpdate
+    volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        creationTimestamp: null
+        name: mysql-pv
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        volumeMode: Filesystem
+      status:
+        phase: Pending
+  status:
+    availableReplicas: 1
+    collisionCount: 0
+    currentReplicas: 1
+    currentRevision: mysql-fcbb967b8
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updateRevision: mysql-fcbb967b8
+    updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""

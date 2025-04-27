@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mysql
-  namespace: database
+  namespace: jokes-app
 spec:
   serviceName: "mysql"
   replicas: 1
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: mysql:8
+        image: loka07/jokes-db:latest
         ports:
         - containerPort: 3306
         env:

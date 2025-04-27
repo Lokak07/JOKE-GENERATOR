@@ -5,7 +5,7 @@ metadata:
   labels:
     app: front-end
   name: front-end
-  namespace: frontend
+  namespace: jokes-app
 spec:
   replicas: 2
   selector:
@@ -19,7 +19,7 @@ spec:
         app: front-end
     spec:
       containers:
-      - image: loka07/jokes-frontend:latest
+      - image: loka07/jokes-frontend:v3
         name: jokes-frontend
         resources: {}
         ports:

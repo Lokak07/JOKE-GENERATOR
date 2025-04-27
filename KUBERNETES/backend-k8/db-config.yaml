@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mysql-config
-  namespace: database
+  namespace: jokes-app
 data:
   database: jokesdb
   host: mysql
