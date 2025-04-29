@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: front-end
+  name: front-end
+  namespace: jokes-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: front-end
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: front-end
+    spec:
+      containers:
+      - image: loka07/frontend-jokes:w1
+        name: jokes-frontend
+        resources: {}
+        ports:
+        - containerPort: 80
+status: {}

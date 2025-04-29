@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: joke-ingress
+  namespace: jokes-app
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: localhost
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: front-end-service
+            port:
+              number: 80
+      - path: /joke
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-end-service
+            port:
+              number: 80
