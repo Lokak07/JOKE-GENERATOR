@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-end
+  namespace: jokes-app    # <--- make sure to add the namespace here
+  labels:
+    app: backend-end
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend-end
+  template:
+    metadata:
+      labels:
+        app: backend-end
+    spec:
+      containers:
+      - name: jokes-bakend
+        image: loka07/jokes-backend:v2 
+        ports:
+        - containerPort: 80
+        env:
+        - name: DB_HOST
+          value: mysql
+        - name: DB_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-config
+              key: database
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: username
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: password
