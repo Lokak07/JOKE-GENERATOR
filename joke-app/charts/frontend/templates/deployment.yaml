@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.labels.app }}
+  name: {{ .Values.app.name }}
   labels:
     app: {{ .Values.labels.app }}
 spec:
@@ -15,7 +15,7 @@ spec:
         app: {{ .Values.labels.app }}
     spec:
       containers:
-        - name: jokes-frontend
+        - name: {{ .Values.image.name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:

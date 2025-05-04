@@ -1,13 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-end-service
-  namespace: jokes-app
+  name: {{ .Values.service.name }}
+  namespace: {{ .Values.app.namespace }}
+  labels:
+    app: {{ .Values.labels.app }}
 spec:
   selector:
-    app: backend-end
+    app: {{ .Values.labels.app }}
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 3000
-  type: ClusterIP
+    - protocol: TCP
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+  type: {{ .Values.service.type }}

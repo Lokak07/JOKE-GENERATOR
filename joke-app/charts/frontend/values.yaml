@@ -3,7 +3,11 @@ serviceAccount:
 
 replicaCount: 2
 
+app:
+  name: front-end
+
 image:
+  name: jokes-frontend
   repository: loka07/frontend-jokes
   tag: w1
   pullPolicy: IfNotPresent
