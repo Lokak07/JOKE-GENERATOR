@@ -24,9 +24,9 @@ module "eks" {
 module "ebs_csi_irsa" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
 
-  role_name           = "ebs-csi-controller-role"
-  provider_url        = module.eks.oidc_provider
-  role_policy_arns    = ["arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"]
+  role_name        = "ebs-csi-controller-role"
+  provider_url     = module.eks.oidc_provider
+  role_policy_arns = ["arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"]
   oidc_fully_qualified_subjects = [
     "system:serviceaccount:kube-system:ebs-csi-controller-sa"
   ]
