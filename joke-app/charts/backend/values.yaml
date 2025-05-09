@@ -1,0 +1,32 @@
+app:
+  name: backend-end
+  namespace: jokes-app
+
+labels:
+  app: jokes-backend
+
+image:
+  name: jokes-backend
+  repository: loka07/jokes-backend
+  tag: v2
+
+service:
+  name: backend-end-service
+  port: 80
+  targetPort: 3000
+  type: ClusterIP
+
+configmap:
+  name: mysql-config
+  key: database
+
+secrets:
+  mysql:
+    name: mysql-secret
+    keys:
+      username: username
+      password: password
+
+
+env:
+  dbHost: mysql

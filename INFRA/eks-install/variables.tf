@@ -10,6 +10,14 @@ variable "vpc_cidr" {
   default     = "10.0.0.0/16"
 }
 
+// Enabling IAM Roles for Service Accounts (IRSA) allows you to assign IAM roles to Kubernetes service accounts.
+# variable "enable_irsa" {
+#   description = "Enable IAM Roles for Service Accounts (IRSA)"
+#   type        = bool
+#   default     = true
+  
+# }
+
 variable "availability_zones" {
   description = "Availability zones"
   type        = list(string)
