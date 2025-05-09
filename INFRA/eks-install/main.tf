@@ -17,5 +17,4 @@ module "eks" {
   vpc_id          = module.vpc.vpc_id
   subnet_ids      = module.vpc.private_subnet_ids
   node_groups     = var.node_groups
-  enable_irsa   = var.enable_irsa
 }

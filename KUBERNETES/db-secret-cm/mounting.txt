@@ -30,3 +30,10 @@ eksctl create addon \
 =======================================
 
 Delete the IAM service account cleanly
+
+eksctl delete iamserviceaccount \
+  --name ebs-csi-controller-sa \
+  --namespace kube-system \
+  --cluster Opentelemetry-demo \
+  --region us-east-1
+
