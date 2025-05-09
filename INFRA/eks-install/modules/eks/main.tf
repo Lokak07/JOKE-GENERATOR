@@ -22,6 +22,7 @@ resource "aws_eks_cluster" "main" {
   name     = var.cluster_name
   version  = var.cluster_version
   role_arn = aws_iam_role.cluster.arn
+  
 
   vpc_config {
     subnet_ids = var.subnet_ids
@@ -78,4 +79,12 @@ resource "aws_eks_node_group" "main" {
   depends_on = [
     aws_iam_role_policy_attachment.node_policy
   ]
+}
+
+resource "aws_iam_openid_connect_provider" "add_oidc" {
+  count = var.enable_irsa ? 1 : 0
+
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da0ecd6f5c5"] # Default for AWS OIDC
+  url             = aws_eks_cluster.main.identity[0].oidc[0].issuer
 }

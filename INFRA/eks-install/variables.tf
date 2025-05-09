@@ -63,3 +63,10 @@ variable "node_groups" {
     }
   }
 }
+
+variable "enable_irsa" {
+  description = "Whether to enable IAM Roles for Service Accounts (IRSA)"
+  type        = bool
+  default     = false
+  
+}

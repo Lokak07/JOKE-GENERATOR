@@ -17,4 +17,17 @@ module "eks" {
   vpc_id          = module.vpc.vpc_id
   subnet_ids      = module.vpc.private_subnet_ids
   node_groups     = var.node_groups
+  enable_irsa     = var.enable_irsa
+}
+
+
+module "ebs_csi_irsa" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+
+  role_name           = "ebs-csi-controller-role"
+  provider_url        = module.eks.oidc_provider
+  role_policy_arns    = ["arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"]
+  oidc_fully_qualified_subjects = [
+    "system:serviceaccount:kube-system:ebs-csi-controller-sa"
+  ]
 }
