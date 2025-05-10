@@ -8,13 +8,7 @@ output "cluster_name" {
   value       = aws_eks_cluster.main.name
 }
 
-# output "oidc_provider" {
-#   value       = aws_iam_openid_connect_provider.add_oidc[0].url
-#   description = "OIDC provider URL for IRSA"
-# }
 
-output "oidc_provider" {
-  description = "OIDC provider URL for the EKS cluster"
-  value       = aws_iam_openid_connect_provider.add_oidc[0].url
-}
+
+
 
