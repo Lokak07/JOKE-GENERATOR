@@ -58,17 +58,21 @@ jobs:
         id: validate
         run: terraform validate
 
-      - name: Terraform Plan (saved to tfplan)
+      - name: Terraform Plan (save to tfplan + generate plan.txt)
         if: github.event.inputs.action == 'plan'
-        run: terraform plan -out=tfplan
+        run: |
+          terraform plan -out=tfplan
+          terraform show -no-color tfplan > plan.txt
 
-      - name: Upload tfplan artifact
+      - name: Upload tfplan & plan.txt
         if: github.event.inputs.action == 'plan'
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: ./INFRA/eks-install/tfplan
-                ./INFRA/eks-install/plan.txt
+          path: |
+            tfplan
+            plan.txt
+          if-no-files-found: error
 
       - name: Download tfplan artifact
         if: github.event.inputs.action == 'apply'
