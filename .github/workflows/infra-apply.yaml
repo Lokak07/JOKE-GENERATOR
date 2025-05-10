@@ -72,12 +72,6 @@ jobs:
           path: ./INFRA/eks-install/tfplan.txt
           if-no-files-found: error
 
-      - name: Download tfplan artifact
-        if: github.event.inputs.action == 'apply'
-        uses: actions/download-artifact@v4
-        with:
-          name: tfplan
-          path: ./INFRA/eks-install
 
       - name: Terraform Apply (manual)
         if: github.event.inputs.action == 'apply'
