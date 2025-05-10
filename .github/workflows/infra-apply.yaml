@@ -69,7 +69,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: ./INFRA/eks-install/tfplan.txt
+          path: |
+            ./INFRA/eks-install/tfplan
+            ./INFRA/eks-install/plan.txt
           if-no-files-found: error
 
       - name: Download tfplan artifact
