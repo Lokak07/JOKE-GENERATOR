@@ -8,20 +8,15 @@ on:
       - INFRA/eks-install**
       - .github/workflows/**
 
-  # pull_request:
-  #   branches:
-  #     - main
-  #   paths:
-  #     - eks-install/**
-
   workflow_dispatch:
     inputs:
       action:
         description: 'Terraform action to perform'
         required: true
-        default: 'apply'
+        default: 'plan'
         type: choice
         options:
+          - plan
           - apply
 
 env: 
@@ -31,12 +26,12 @@ env:
 
 jobs:
   terraform:
-    name: "Terraform Infrastructure Change Management"
+    name: "Terraform Infra - Plan or Apply"
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
-        working-directory: ./INFRA/eks-install
+        working-directory: ./INFRA/eks-install    
 
     steps:
       - name: Checkout the repository
@@ -63,38 +58,24 @@ jobs:
         id: validate
         run: terraform validate
 
-      # Plan runs ONLY for pull requests
-      - name: Terraform plan
-        id: plan
-        if: github.event_name == 'pull_request'
-        run: terraform plan -no-color -input=false
-        continue-on-error: true
+      - name: Terraform Plan (saved to tfplan)
+        if: github.event.inputs.action == 'plan'
+        run: terraform plan -out=tfplan
 
-      - uses: actions/github-script@v6
-        if: github.event_name == 'pull_request'
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+      - name: Upload tfplan artifact
+        if: github.event.inputs.action == 'plan'
+        uses: actions/upload-artifact@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-            <details><summary>Show Plan</summary>\`\`\`\n${process.env.PLAN}\`\`\`\n</details>
-            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            });
+          name: tfplan
+          path: ./INFRA/eks-install/tfplan
 
-      - name: Terraform Plan Status
-        if: github.event_name == 'pull_request' && steps.plan.outcome == 'failure'
-        run: exit 1
+      - name: Download tfplan artifact
+        if: github.event.inputs.action == 'apply'
+        uses: actions/download-artifact@v4
+        with:
+          name: tfplan
+          path: ./INFRA/eks-install
 
-      # Apply runs ONLY for push and pull requests, or manually triggered apply
-      - name: Terraform Apply
-        if: github.event_name == 'push' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply')
-        run: terraform apply -auto-approve -input=false
+      - name: Terraform Apply (manual)
+        if: github.event.inputs.action == 'apply'
+        run: terraform apply tfplan
