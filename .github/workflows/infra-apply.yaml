@@ -68,6 +68,7 @@ jobs:
         with:
           name: tfplan
           path: ./INFRA/eks-install/tfplan
+                ./INFRA/eks-install/plan.txt
 
       - name: Download tfplan artifact
         if: github.event.inputs.action == 'apply'
