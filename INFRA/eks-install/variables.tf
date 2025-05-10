@@ -15,7 +15,7 @@ variable "vpc_cidr" {
 #   description = "Enable IAM Roles for Service Accounts (IRSA)"
 #   type        = bool
 #   default     = true
-  
+
 # }
 
 variable "availability_zones" {

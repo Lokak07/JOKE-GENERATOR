@@ -81,10 +81,39 @@ resource "aws_eks_node_group" "main" {
   ]
 }
 
-resource "aws_iam_openid_connect_provider" "add_oidc" {
-  count = var.enable_irsa ? 1 : 0
+# resource "aws_iam_openid_connect_provider" "add_oidc" {
+#   count = var.enable_irsa ? 1 : 0
 
+#   client_id_list  = ["sts.amazonaws.com"]
+#   thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da0ecd6f5c5"] # Default for AWS OIDC
+#   url             = aws_eks_cluster.main.identity[0].oidc[0].issuer
+# }
+
+
+# module "ebs_csi_irsa" {
+#   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+#   count  = var.enable_ebs_csi ? 1 : 0
+
+#   role_name        = var.ebs_csi_role_name
+#   provider_url     = module.eks.oidc_provider
+#   role_policy_arns = ["arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"]
+#   oidc_fully_qualified_subjects = [
+#     "system:serviceaccount:kube-system:ebs-csi-controller-sa"
+#   ]
+# }
+
+# resource "aws_eks_addon" "ebs_csi" {
+#   depends_on =               [module.ebs_csi_irsa]  
+#   count                    = var.enable_ebs_csi ? 1 : 0
+#   cluster_name             = module.eks.cluster_name
+#   addon_name               = "aws-ebs-csi-driver"
+#   addon_version            = var.ebs_csi_addon_version
+#   service_account_role_arn = module.ebs_csi_irsa[0].iam_role_arn
+# }
+
+resource "aws_iam_openid_connect_provider" "add_oidc" {
+  count           = var.enable_irsa ? 1 : 0
   client_id_list  = ["sts.amazonaws.com"]
-  thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da0ecd6f5c5"] # Default for AWS OIDC
+  thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da0ecd6f5c5"]
   url             = aws_eks_cluster.main.identity[0].oidc[0].issuer
 }
