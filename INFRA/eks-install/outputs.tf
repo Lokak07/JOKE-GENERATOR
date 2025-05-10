@@ -17,5 +17,14 @@ output "vpc_id" {
 #   value = var.enable_ebs_csi
 # }
 
+output "oidc_provider_url" {
+  description = "OIDC Provider URL for the EKS cluster"
+  value       = module.eks.oidc_provider_url
+}
+
+output "oidc_provider_arn" {
+  description = "OIDC Provider ARN for the EKS cluster"
+  value       = module.eks.oidc_provider_arn
+}
 
 

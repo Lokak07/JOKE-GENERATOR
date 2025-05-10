@@ -31,3 +31,11 @@ variable "node_groups" {
   }))
 }
 
+//
+// The following variables are used for the EBS CSI driver addon
+
+variable "enable_irsa" {
+  description = "Enable IAM Roles for Service Accounts (IRSA)"
+  type        = bool
+  default     = false
+}
