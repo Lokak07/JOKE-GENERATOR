@@ -12,7 +12,7 @@ on:
 
 env:
   AWS_REGION: us-east-1  # adjust this
-  CLUSTER_NAME: my-eks-cluster  # adjust this
+  CLUSTER_NAME: Jokes-demo  # adjust this
   NAMESPACE: jokes-app  # adjust this
   RELEASE_NAME: joke-app
 
