@@ -48,7 +48,7 @@ jobs:
       - name: Terraform validate
         run: terraform validate
 
-      - name: Terraform Plan (save binary tfplan + readable tfplan.txt)
+      - name: Terraform Plan (generate tfplan + tfplan.txt)
         if: github.event.inputs.action == 'plan'
         run: |
           terraform plan -no-color -input=false -lock-timeout=60s -out=tfplan
@@ -68,6 +68,6 @@ jobs:
           overwrite: false
           include-hidden-files: false
 
-      - name: Terraform Apply using saved tfplan
+      - name: Terraform Apply (auto-approve)
         if: github.event.inputs.action == 'apply'
-        run: terraform apply tfplan
+        run: terraform apply --auto-approve
