@@ -1,7 +1,6 @@
 name: "Terraform Infrastructure Change Management Pipeline with GitHub Actions"
 
-on: 
-
+on:
   workflow_dispatch:
     inputs:
       action:
@@ -41,36 +40,34 @@ jobs:
           aws s3 cp s3://shakthi-tf-bucket/terraform.tfvars terraform.tfvars
 
       - name: Terraform init
-        id: init
         run: terraform init
 
       - name: Terraform format
-        id: fmt
         run: terraform fmt -check
 
       - name: Terraform validate
-        id: validate
         run: terraform validate
 
-      - name: Terraform Plan (save to tfplan + generate tfplan.txt)
+      - name: Terraform Plan (save binary tfplan + readable tfplan.txt)
         if: github.event.inputs.action == 'plan'
         run: |
           terraform plan -no-color -input=false -lock-timeout=60s -out=tfplan
-          terraform show -json -no-color tfplan > tfplan.json
+          terraform show -no-color tfplan > tfplan.txt
 
-      - name: Upload tfplan & plan.txt
+      - name: Upload tfplan & tfplan.txt as artifact
         if: github.event.inputs.action == 'plan'
         uses: actions/upload-artifact@v4
         with:
-          name: terraform plan
-          path: tfplan
+          name: terraform-plan
+          path: |
+            ./INFRA/eks-install/tfplan
+            ./INFRA/eks-install/tfplan.txt
           retention-days: 1
           if-no-files-found: error
           compression-level: 6
           overwrite: false
           include-hidden-files: false
 
-
-      - name: Terraform Apply (manual)
+      - name: Terraform Apply using saved tfplan
         if: github.event.inputs.action == 'apply'
-        run: terraform apply --auto-approve
+        run: terraform apply tfplan
