@@ -1,12 +1,6 @@
 name: "Terraform Infrastructure Change Management Pipeline with GitHub Actions"
 
 on: 
-  push: 
-    branches:
-      - frontend-config
-    paths:
-      - INFRA/eks-install**
-      - .github/workflows/**
 
   workflow_dispatch:
     inputs:
@@ -61,16 +55,15 @@ jobs:
       - name: Terraform Plan (save to tfplan + generate tfplan.txt)
         if: github.event.inputs.action == 'plan'
         run: |
-          terraform plan -out=tfplan
-          terraform show -no-color tfplan > tfplan.txt
+          terraform plan -no-color -input=false -lock-timeout=60s -out=tfplan
+          terraform show -json -no-color tfplan > tfplan.json
 
       - name: Upload tfplan & plan.txt
         if: github.event.inputs.action == 'plan'
         uses: actions/upload-artifact@v4
         with:
-          name: tfplan
-          path: ./INFRA/eks-install/tfplan.txt
-                ./INFRA/eks-install/tfplan
+          name: terraform plan
+          path: tfplan
           retention-days: 1
           if-no-files-found: error
           compression-level: 6
