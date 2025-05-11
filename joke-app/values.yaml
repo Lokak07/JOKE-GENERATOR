@@ -4,6 +4,7 @@ frontend:
   replicaCount: 2
   app:
     name: front-end
+    namespace: jokes-app
   image:
     name: jokes-frontend
     repository: loka07/frontend-jokes
