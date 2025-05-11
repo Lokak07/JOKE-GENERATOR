@@ -58,11 +58,11 @@ jobs:
         id: validate
         run: terraform validate
 
-      - name: Terraform Plan (save to tfplan + generate plan.txt)
+      - name: Terraform Plan (save to tfplan + generate tfplan.txt)
         if: github.event.inputs.action == 'plan'
         run: |
           terraform plan -out=tfplan
-          terraform show -no-color tfplan > plan.txt
+          terraform show -no-color tfplan > tfplan.txt
 
       - name: Upload tfplan & plan.txt
         if: github.event.inputs.action == 'plan'
@@ -70,6 +70,8 @@ jobs:
         with:
           name: tfplan
           path: ./INFRA/eks-install/tfplan.txt
+                ./INFRA/eks-install/tfplan
+          retention-days: 1
           if-no-files-found: error
 
 
