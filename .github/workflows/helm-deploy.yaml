@@ -11,10 +11,10 @@ on:
   workflow_dispatch:
 
 env:
-  AWS_REGION: us-east-1  # adjust this
-  CLUSTER_NAME: Jokes-demo  # adjust this
-  NAMESPACE: jokes-app  # adjust this
-  RELEASE_NAME: joke-app
+  AWS_REGION: us-east-1
+  CLUSTER_NAME: Jokes-demo
+  NAMESPACE: jokes-app
+  RELEASE_NAME: joke-app-release
 
 jobs:
   helm-deploy:
@@ -42,19 +42,21 @@ jobs:
       - name: Helm Lint
         run: helm lint ./joke-app
 
-      - name: Helm Dry Run
-        run: helm upgrade --install $RELEASE_NAME ./joke-app \
-          --namespace $NAMESPACE \
-          --create-namespace \
-          --dry-run \
-          --debug
+      - name: Helm Dry Run (Preview)
+        run: |
+          helm upgrade --install $RELEASE_NAME ./joke-app \
+            --namespace $NAMESPACE \
+            --create-namespace \
+            --dry-run \
+            --debug
 
       - name: Deploy with Helm
-        run: helm upgrade --install $RELEASE_NAME ./joke-app \
-          --namespace $NAMESPACE \
-          --create-namespace \
-          --values ./joke-app/values.yaml \
-          --wait
+        run: |
+          helm upgrade --install $RELEASE_NAME ./joke-app \
+            --namespace $NAMESPACE \
+            --create-namespace \
+            --values ./joke-app/values.yaml \
+            --wait
 
       - name: Wait for Deployment to be Ready
         run: |
