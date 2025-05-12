@@ -10,16 +10,15 @@ on:
 
   workflow_dispatch:
 
-env:
-  AWS_REGION: us-east-1
-  CLUSTER_NAME: Jokes-demo
-  NAMESPACE: jokes-app
-  RELEASE_NAME: joke-app-release
-
 jobs:
   helm-deploy:
     name: Deploy Helm Chart
     runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-east-1
+      CLUSTER_NAME: Jokes-demo
+      NAMESPACE: jokes-app
+      RELEASE_NAME: joke-app-release
 
     steps:
       - name: Checkout Code
