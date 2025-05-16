@@ -1,0 +1,40 @@
+serviceAccount:
+  create: false   # or true, if you need it
+
+replicaCount: 2
+
+app:
+  name: front-end
+
+image:
+  name: jokes-frontend
+  repository: loka07/frontend-jokes
+  tag: w1
+  pullPolicy: IfNotPresent
+
+service:
+  name: front-end-service
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+labels:
+  app: front-end
+
+ingress:
+  enabled: true
+  className: alb
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+  host: www.dev-ops.solutions
+  paths:
+    - path: /
+      pathType: Prefix
+      serviceName: front-end-service
+      servicePort: 80
+    - path: /joke
+      pathType: Prefix
+      serviceName: backend-end-service
+      servicePort: 80

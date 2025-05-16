@@ -1,0 +1,103 @@
+frontend:
+  serviceAccount:
+    create: false
+  replicaCount: 2
+  app:
+    name: front-end
+    namespace: jokes-app
+  image:
+    name: jokes-frontend
+    repository: loka07/frontend-jokes
+    tag: w1
+    pullPolicy: IfNotPresent
+  service:
+    name: front-end-service
+    type: ClusterIP
+    port: 80
+    targetPort: 80
+  labels:
+    app: front-end
+  ingress:
+    enabled: true
+    className: alb
+    annotations:
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/target-type: ip
+    host: www.dev-ops.solutions
+    paths:
+      - path: /
+        pathType: Prefix
+        serviceName: front-end-service
+        servicePort: 80
+      - path: /joke
+        pathType: Prefix
+        serviceName: backend-end-service
+        servicePort: 80
+
+backend:
+  app:
+    name: backend-end
+    namespace: jokes-app
+  labels:
+    app: jokes-backend
+  image:
+    name: jokes-backend
+    repository: loka07/jokes-backend
+    tag: v2
+  service:
+    name: backend-end-service
+    port: 80
+    targetPort: 3000
+    type: ClusterIP
+  configmap:
+    name: mysql-config
+    key: database
+  secrets:
+    mysql:
+      name: mysql-secret
+      keys:
+        username: username
+        password: password
+  env:
+    dbHost: mysql
+
+db:
+  app:
+    namespace: jokes-app
+  mysql:
+    name: mysql
+    serviceName: mysql
+    replicas: 1
+    labels:
+      app: mysql
+    container:
+      name: mysql
+      image:
+        repository: loka07/jokes-db
+        tag: latest
+      port: 3306
+    volume:
+      name: mysql-pv
+      accessMode: ReadWriteOnce
+      storageClass: ebs-sc
+      size: 1Gi
+      mountPath: /var/lib/mysql
+    service:
+      name: mysql
+      port: 3306
+      type: ClusterIP
+      headless: true
+  secrets:
+    mysql:
+      name: mysql-secret
+      keys:
+        password: password
+  storageClass:
+    create: true
+    name: ebs-sc
+    default: "true"
+    provisioner: ebs.csi.aws.com
+    volumeBindingMode: WaitForFirstConsumer
+    reclaimPolicy: Delete
+    allowVolumeExpansion: true

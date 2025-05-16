@@ -1,0 +1,42 @@
+app:
+  namespace: jokes-app
+
+mysql:
+  name: mysql
+  serviceName: mysql
+  replicas: 1
+  labels:
+    app: mysql
+  container:
+    name: mysql
+    image:
+      repository: loka07/jokes-db
+      tag: latest
+    port: 3306
+  volume:
+    name: mysql-pv
+    accessMode: ReadWriteOnce
+    storageClass: ebs-sc
+    size: 1Gi
+    mountPath: /var/lib/mysql
+  service:
+    name: mysql
+    port: 3306
+    type: ClusterIP  # Optional — 'ClusterIP' is default. Use 'NodePort' or 'LoadBalancer' if needed.
+    headless: true   # You can use this to toggle headless service generation (clusterIP: None)
+
+secrets:
+  mysql:
+    name: mysql-secret
+    keys:
+      password: password
+
+storageClass:
+  create: true
+  name: ebs-sc
+  default: "true"
+  provisioner: ebs.csi.aws.com
+  volumeBindingMode: WaitForFirstConsumer
+  reclaimPolicy: Delete
+  allowVolumeExpansion: true
+

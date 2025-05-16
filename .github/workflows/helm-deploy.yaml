@@ -10,16 +10,15 @@ on:
 
   workflow_dispatch:
 
-env:
-  AWS_REGION: us-east-1  # adjust this
-  CLUSTER_NAME: my-eks-cluster  # adjust this
-  NAMESPACE: jokes-app  # adjust this
-  RELEASE_NAME: joke-app
-
 jobs:
   helm-deploy:
     name: Deploy Helm Chart
     runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-east-1
+      CLUSTER_NAME: Jokes-demo
+      NAMESPACE: jokes-app
+      RELEASE_NAME: joke-app
 
     steps:
       - name: Checkout Code
@@ -42,19 +41,27 @@ jobs:
       - name: Helm Lint
         run: helm lint ./joke-app
 
-      - name: Helm Dry Run
-        run: helm upgrade --install $RELEASE_NAME ./joke-app \
-          --namespace $NAMESPACE \
-          --create-namespace \
-          --dry-run --debug
+      - name: Helm Dry Run (Preview)
+        run: |
+          helm upgrade --install $RELEASE_NAME ./joke-app \
+            --namespace $NAMESPACE \
+            --create-namespace \
+            --dry-run \
+            --debug
 
       - name: Deploy with Helm
-        run: helm upgrade --install $RELEASE_NAME ./joke-app \
-          --namespace $NAMESPACE \
-          --create-namespace \
-          --values ./joke-app/values.yaml \
-          --wait
-
-      - name: Wait for Deployment to be Ready
         run: |
-          kubectl rollout status deployment/$RELEASE_NAME -n $NAMESPACE --timeout=120s
+          helm upgrade --install $RELEASE_NAME ./joke-app \
+            --namespace $NAMESPACE \
+            --create-namespace \
+            --values ./joke-app/values.yaml \
+            --wait
+
+      - name: Wait for Frontend Deployment to be Ready
+        run: kubectl rollout status deployment/front-end -n $NAMESPACE --timeout=300s
+
+      - name: Wait for Backend Deployment to be Ready
+        run: kubectl rollout status deployment/backend-end -n $NAMESPACE --timeout=300s
+        
+      - name: Wait for MySQL Pod to be Ready
+        run: kubectl rollout status statefulset/mysql -n $NAMESPACE --timeout=120s
