@@ -18,7 +18,7 @@ jobs:
       AWS_REGION: us-east-1
       CLUSTER_NAME: Jokes-demo
       NAMESPACE: jokes-app
-      RELEASE_NAME: joke-app-release
+      RELEASE_NAME: joke-app
 
     steps:
       - name: Checkout Code
