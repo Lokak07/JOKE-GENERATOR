@@ -1,6 +1,7 @@
-# CI for Flagd UI
 
-name: flagd-ui-ci
+
+name: "CI/CD Pipeline for Backend"
+# This workflow is triggered on:
 
 on:
   workflow_dispatch:  # ✅ Manual trigger (via GitHub UI)
