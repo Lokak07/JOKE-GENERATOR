@@ -65,4 +65,3 @@ jobs:
         
       - name: Wait for MySQL Pod to be Ready
         run: kubectl rollout status statefulset/mysql -n $NAMESPACE --timeout=120s
-
