@@ -1,0 +1,89 @@
+name: Install AWS Load Balancer Controller
+
+on:
+  workflow_dispatch:  # manually triggered
+
+jobs:
+  install-lb-controller:
+    name: Setup AWS Load Balancer Controller
+    runs-on: ubuntu-latest
+
+    env:
+      CLUSTER_NAME: Jokes-demo
+      REGION: us-east-1
+      ROLE_NAME: AmazonEKSLoadBalancerControllerRole
+      POLICY_NAME: AWSLoadBalancerControllerIAMPolicy
+      POLICY_FILE: iam_policy.json
+      SA_NAME: aws-load-balancer-controller
+      NAMESPACE: kube-system
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.REGION }}
+
+    - name: Get OIDC provider ID
+      id: oidc
+      run: |
+        OIDC_URL=$(aws eks describe-cluster --name $CLUSTER_NAME --query "cluster.identity.oidc.issuer" --output text)
+        OIDC_ID=$(echo $OIDC_URL | cut -d '/' -f 5)
+        echo "OIDC_ID=$OIDC_ID" >> $GITHUB_ENV
+
+    - name: Download eksctl
+      run: |
+        curl --silent --location "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
+        sudo mv /tmp/eksctl /usr/local/bin
+        eksctl version
+
+    - name: Associate IAM OIDC Provider
+      run: |
+        eksctl utils associate-iam-oidc-provider \
+          --cluster $CLUSTER_NAME \
+          --approve
+
+    - name: Download IAM policy file
+      run: curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/install/iam_policy.json
+
+    - name: Create IAM policy (if not exists)
+      continue-on-error: true  # Skip if it already exists
+      run: |
+        aws iam create-policy \
+          --policy-name $POLICY_NAME \
+          --policy-document file://$POLICY_FILE
+
+    - name: Create IAM service account
+      run: |
+        eksctl create iamserviceaccount \
+          --cluster=$CLUSTER_NAME \
+          --namespace=$NAMESPACE \
+          --name=$SA_NAME \
+          --role-name=$ROLE_NAME \
+          --attach-policy-arn=arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:policy/$POLICY_NAME \
+          --approve \
+          --override-existing-serviceaccounts
+
+    - name: Add EKS Helm chart repo
+      run: |
+        helm repo add eks https://aws.github.io/eks-charts
+        helm repo update
+
+    - name: Get VPC ID
+      id: get_vpc
+      run: |
+        VPC_ID=$(aws eks describe-cluster --name $CLUSTER_NAME --query "cluster.resourcesVpcConfig.vpcId" --output text)
+        echo "vpc_id=$VPC_ID" >> $GITHUB_OUTPUT
+
+    - name: Install AWS Load Balancer Controller via Helm
+      run: |
+        helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n $NAMESPACE \
+          --set clusterName=$CLUSTER_NAME \
+          --set serviceAccount.create=false \
+          --set serviceAccount.name=$SA_NAME \
+          --set region=$REGION \
+          --set vpcId=${{ steps.get_vpc.outputs.vpc_id }}
